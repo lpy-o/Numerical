@@ -1,5 +1,15 @@
 from math import log, ceil
 
+def root_search(f, start, dx, end):
+    roots = [];
+    while start <= end:
+        temp = start + dx
+        if f(temp) * f(start) < 0:
+            roots.append((start, temp))
+        start = temp
+    return roots
+
+
 def bisection(f, x1, x2, switch = 1, tol = 1.0e-9):
     f1 = f(x1)
     if f1 == 0.0:
@@ -90,12 +100,26 @@ def brent(f, x1, x2, tol =  1.0e-9):
             swap(x1, x2)
             swap(f1, f2)
     return s
-def func(x):
+def func1(x):
     return x*x*x - 10*x*x + 5
 
-a = bisection(func,0.6,0.8)
-b = secant(func, 0.5,0.6)
-c = brent(func, 0.6, 0.8)
-print a
-print b
-print c
+def func2(x):
+    return x*x -2
+
+def func3(x):
+        return x*x*x*x - 6.4*x*x*x + 6.45*x*x + 20.538*x - 31.752
+
+def init(f, start, dx, num):
+    brackets = root_search(f, start, dx, num)
+    index = 0
+    for a, b in brackets:
+        x = brent(f, a, b)
+        print "Root " + repr(index) + " is " + repr(x)
+        index += 1
+    print ""
+
+init(func1, -10, 0.2, 10)
+init(func2, -2, 0.1, 2)
+init(func3, -2, 0.01, 5)
+print "In third function, a double root could not be detected by " \
+"the root search algorithm."
